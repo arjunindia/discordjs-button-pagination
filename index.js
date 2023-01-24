@@ -17,6 +17,7 @@ const paginationEmbed = async (
   interaction,
   pages,
   buttonList,
+  ephemeral = false,
   timeout = 120000
 ) => {
   if (!pages) throw new Error("Pages are not given.");
@@ -33,11 +34,15 @@ const paginationEmbed = async (
 
   //has the interaction already been deferred? If not, defer the reply.
   if (interaction.deferred == false) {
-    await interaction.deferReply();
+    await interaction.deferReply({
+      ephemeral: ephemeral,
+    });
   }
 
   const curPage = await interaction.editReply({
-    embeds: [pages[page].setFooter({ text: `Page ${page + 1} / ${pages.length}` })],
+    embeds: [
+      pages[page].setFooter({ text: `Page ${page + 1} / ${pages.length}` }),
+    ],
     components: [row],
     fetchReply: true,
   });
@@ -64,7 +69,9 @@ const paginationEmbed = async (
     }
     await i.deferUpdate();
     await i.editReply({
-      embeds: [pages[page].setFooter({ text: `Page ${page + 1} / ${pages.length}` })],
+      embeds: [
+        pages[page].setFooter({ text: `Page ${page + 1} / ${pages.length}` }),
+      ],
       components: [row],
     });
     collector.resetTimer();
@@ -77,7 +84,9 @@ const paginationEmbed = async (
         buttonList[1].setDisabled(true)
       );
       curPage.edit({
-        embeds: [pages[page].setFooter({ text: `Page ${page + 1} / ${pages.length}` })],
+        embeds: [
+          pages[page].setFooter({ text: `Page ${page + 1} / ${pages.length}` }),
+        ],
         components: [disabledRow],
       });
     }
