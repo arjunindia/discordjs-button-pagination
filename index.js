@@ -45,6 +45,7 @@ const paginationEmbed = async (
     ],
     components: [row],
     fetchReply: true,
+    ephemeral: ephemeral,
   });
 
   const filter = (i) =>
@@ -67,12 +68,16 @@ const paginationEmbed = async (
       default:
         break;
     }
-    await i.deferUpdate();
+    await i.deferUpdate({
+      ephemeral: ephemeral,
+    });
     await i.editReply({
       embeds: [
         pages[page].setFooter({ text: `Page ${page + 1} / ${pages.length}` }),
       ],
       components: [row],
+
+      ephemeral: ephemeral,
     });
     collector.resetTimer();
   });
@@ -88,6 +93,7 @@ const paginationEmbed = async (
           pages[page].setFooter({ text: `Page ${page + 1} / ${pages.length}` }),
         ],
         components: [disabledRow],
+        ephemeral: ephemeral,
       });
     }
   });
